@@ -1,0 +1,18 @@
+table _Mesures_Overview
+	lineageTag: 38cdb32c-0891-4a9a-8ff6-48ec1470999a
+
+	column Colonne
+		dataType: string
+		isHidden
+		lineageTag: de2c031d-8bbf-4853-92d6-455722341479
+		summarizeBy: none
+		sourceColumn: Colonne
+
+	partition _Mesures_Overview = m
+		mode: import
+		source =
+				let
+					Source = #table(type table [Colonne = text], {})
+				in
+					Source
+

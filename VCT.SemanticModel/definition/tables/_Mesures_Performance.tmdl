@@ -1,0 +1,18 @@
+table _Mesures_Performance
+	lineageTag: 2cad37c6-0c48-4e11-bd17-d77982f3f929
+
+	column Colonne
+		dataType: string
+		isHidden
+		lineageTag: b6de4d24-32f5-49e7-8b67-1f2e6662b28d
+		summarizeBy: none
+		sourceColumn: Colonne
+
+	partition _Mesures_Performance = m
+		mode: import
+		source =
+				let
+					Source = #table(type table [Colonne = text], {})
+				in
+					Source
+

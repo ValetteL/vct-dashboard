@@ -7,7 +7,7 @@ model Model
 		legacyRedirects
 		returnErrorValuesAsNull
 
-annotation PBI_QueryOrder = ["Annees","Cartes","Agents","Contextes","Picks","Draft","_Mesures","Dossier_Data"]
+annotation PBI_QueryOrder = ["Annees","Cartes","Agents","Contextes","Picks","Draft","_Mesures","_Mesures_Overview","_Mesures_Evolution","_Mesures_Maps","_Mesures_Performance","Dossier_Data"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
@@ -18,4 +18,8 @@ ref table Contextes
 ref table Picks
 ref table Draft
 ref table _Mesures
+ref table _Mesures_Overview
+ref table _Mesures_Evolution
+ref table _Mesures_Maps
+ref table _Mesures_Performance
 

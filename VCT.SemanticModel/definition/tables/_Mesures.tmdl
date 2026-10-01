@@ -75,6 +75,10 @@ table _Mesures
 		formatString: 0.0%
 		lineageTag: 029c7abb-af85-482d-941e-8318a4fe2fce
 
+	/// Couleur du rôle de l'agent, pour la mise en forme conditionnelle (Format > Couleurs > fx > Valeur du champ)
+	measure 'Couleur Rôle' = SWITCH(SELECTEDVALUE(Agents[Role]), "Duelliste", "#FF6B35", "Initiateur", "#F4B400", "Contrôleur", "#7B61FF", "Sentinelle", "#14A3B8", "#2D3A4B")
+		lineageTag: e91a0d53-8fe5-4840-bcd6-0453feaeea9e
+
 	column Colonne
 		dataType: string
 		isHidden

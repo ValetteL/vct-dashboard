@@ -1,0 +1,18 @@
+table _Mesures_Maps
+	lineageTag: 3117ee66-e79d-49c5-aa87-b21110cc3a91
+
+	column Colonne
+		dataType: string
+		isHidden
+		lineageTag: d4ce2149-4c45-4f15-9e68-41e504b09049
+		summarizeBy: none
+		sourceColumn: Colonne
+
+	partition _Mesures_Maps = m
+		mode: import
+		source =
+				let
+					Source = #table(type table [Colonne = text], {})
+				in
+					Source
+
