@@ -1,0 +1,7 @@
+* text=auto
+*.csv -text
+*.pbip text eol=lf
+*.tmdl text eol=lf
+*.json text eol=lf
+*.pbir text eol=lf
+*.pbism text eol=lf

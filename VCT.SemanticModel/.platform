@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "VCT"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c0a1f08e-9534-4450-99b5-e28c734a3fa6"
+  }
+}

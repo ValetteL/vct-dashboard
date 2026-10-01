@@ -1,0 +1,90 @@
+table Contextes
+	lineageTag: eaf36525-e5c7-4001-8e21-39dbf72e822b
+
+	column Cle
+		dataType: string
+		isHidden
+		lineageTag: 401448c5-82e8-4dcd-b2a7-ac124dfa4558
+		summarizeBy: none
+		sourceColumn: Cle
+
+	column Annee
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b620e66d-14f3-4d40-a5d2-7e5f44e788d6
+		summarizeBy: none
+		sourceColumn: Annee
+
+	column Tournoi
+		dataType: string
+		lineageTag: ac04690c-962d-4437-b9a2-50dc9039021e
+		summarizeBy: none
+		sourceColumn: Tournoi
+
+	column Stage
+		dataType: string
+		lineageTag: 0e7fdf0c-826e-4ad6-a255-14e5b010f32c
+		summarizeBy: none
+		sourceColumn: Stage
+
+	column MatchType
+		dataType: string
+		lineageTag: 9b3e36f1-cf0d-4322-a2e3-2ce4bbc41637
+		summarizeBy: none
+		sourceColumn: MatchType
+
+	column Map
+		dataType: string
+		isHidden
+		lineageTag: da272546-03db-415f-9b68-b68a8cc4c2c5
+		summarizeBy: none
+		sourceColumn: Map
+
+	column MapsJouees
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 57e02ce9-b5dc-4dce-b2be-0f3437fb3901
+		summarizeBy: none
+		sourceColumn: MapsJouees
+
+	column WinAttaque
+		dataType: double
+		isHidden
+		formatString: 0.0%
+		lineageTag: f081e17c-771a-4d28-bc93-eab70bb6fac1
+		summarizeBy: none
+		sourceColumn: WinAttaque
+
+	column WinDefense
+		dataType: double
+		isHidden
+		formatString: 0.0%
+		lineageTag: 008e30c2-4ec2-47c4-abc6-cf432dc91d91
+		summarizeBy: none
+		sourceColumn: WinDefense
+
+	partition Contextes = m
+		mode: import
+		source =
+				let
+					Charger = (a as number) =>
+						let
+							Source = Csv.Document(File.Contents(Dossier_Data & "maps_stats_" & Number.ToText(a) & ".csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+							Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+							AvecAnnee = Table.AddColumn(Entetes, "Annee", each a, Int64.Type)
+						in
+							AvecAnnee,
+					Tout = Table.Combine(List.Transform({2021 .. 2026}, Charger)),
+					SansAgregats = Table.SelectRows(Tout, each [Map] <> "All Maps" and [Stage] <> "All Stages" and [#"Match Type"] <> "All Match Types"),
+					Renomme = Table.RenameColumns(SansAgregats, {{"Tournament", "Tournoi"}, {"Match Type", "MatchType"}, {"Total Maps Played", "MapsJouees"}, {"Attacker Side Win Percentage", "WinAttaque"}, {"Defender Side Win Percentage", "WinDefense"}}),
+					Pourcentages = Table.TransformColumns(Renomme, {{"WinAttaque", each Number.FromText(Text.Replace(_, "%", ""), "en-US") / 100, type number}, {"WinDefense", each Number.FromText(Text.Replace(_, "%", ""), "en-US") / 100, type number}}),
+					Types = Table.TransformColumnTypes(Pourcentages, {{"Tournoi", type text}, {"Stage", type text}, {"MatchType", type text}, {"Map", type text}, {"MapsJouees", Int64.Type}}, "en-US"),
+					Cle = Table.AddColumn(Types, "Cle", each Text.From([Annee]) & "|" & [Tournoi] & "|" & [Stage] & "|" & [MatchType] & "|" & [Map], type text),
+					Final = Table.SelectColumns(Cle, {"Cle", "Annee", "Tournoi", "Stage", "MatchType", "Map", "MapsJouees", "WinAttaque", "WinDefense"})
+				in
+					Final
+
+	annotation PBI_ResultType = Table
+

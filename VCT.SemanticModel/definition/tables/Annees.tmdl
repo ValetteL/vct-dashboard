@@ -1,0 +1,19 @@
+table Annees
+	lineageTag: a17debc7-15e4-43ae-a711-b9e4517673e4
+
+	column Annee
+		dataType: int64
+		formatString: 0
+		lineageTag: 3db2de71-9d80-43af-8921-c5f82129d766
+		summarizeBy: none
+		sourceColumn: Annee
+
+	partition Annees = m
+		mode: import
+		source =
+				let
+					Source = Table.FromColumns({{2021 .. 2026}}, {"Annee"}),
+					Types = Table.TransformColumnTypes(Source, {{"Annee", Int64.Type}})
+				in
+					Types
+

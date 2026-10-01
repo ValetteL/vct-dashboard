@@ -1,0 +1,5 @@
+expression Dossier_Data = "D:\Users\louis\Documents\Workspace\Dashboarding\vct-dashboard\data\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 58af9ce7-399e-4b81-ad2a-f185c6d0db88
+
+	annotation PBI_ResultType = Text
+

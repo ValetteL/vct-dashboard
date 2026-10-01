@@ -1,0 +1,80 @@
+table Draft
+	lineageTag: 459a57bc-69b5-4049-a1dc-ee87d31feaf4
+
+	column MatchID
+		dataType: string
+		isHidden
+		lineageTag: 4b165712-347a-4871-b4f5-d0745caaa83b
+		summarizeBy: none
+		sourceColumn: MatchID
+
+	column Annee
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4011f043-3eb1-4d14-b22a-b484049ab052
+		summarizeBy: none
+		sourceColumn: Annee
+
+	column Tournoi
+		dataType: string
+		lineageTag: be44301e-f1e7-435b-b823-5ce1eaab3ac3
+		summarizeBy: none
+		sourceColumn: Tournoi
+
+	column Stage
+		dataType: string
+		lineageTag: d1ccabf2-2fca-4a04-9650-11ad7de90262
+		summarizeBy: none
+		sourceColumn: Stage
+
+	column MatchType
+		dataType: string
+		lineageTag: 3e7627b5-e76f-4bb7-869e-97b7061140b6
+		summarizeBy: none
+		sourceColumn: MatchType
+
+	column Match
+		dataType: string
+		lineageTag: 26eb7502-a154-4895-81ae-a6bb71bbd48c
+		summarizeBy: none
+		sourceColumn: Match
+
+	column Equipe
+		dataType: string
+		lineageTag: 32afb160-c6f5-4b8e-aa72-08be3f3bc9fd
+		summarizeBy: none
+		sourceColumn: Equipe
+
+	column Action
+		dataType: string
+		lineageTag: c06c881f-98df-4f55-8cf7-5d11e0fda9fd
+		summarizeBy: none
+		sourceColumn: Action
+
+	column Map
+		dataType: string
+		isHidden
+		lineageTag: 2dc1c4fc-551a-4106-874a-caa7f73f7aa6
+		summarizeBy: none
+		sourceColumn: Map
+
+	partition Draft = m
+		mode: import
+		source =
+				let
+					Charger = (a as number) =>
+						let
+							Source = Csv.Document(File.Contents(Dossier_Data & "draft_phase_" & Number.ToText(a) & ".csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+							Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+							AvecAnnee = Table.AddColumn(Entetes, "Annee", each a, Int64.Type)
+						in
+							AvecAnnee,
+					Tout = Table.Combine(List.Transform({2021 .. 2026}, Charger)),
+					Renomme = Table.RenameColumns(Tout, {{"Tournament", "Tournoi"}, {"Match Type", "MatchType"}, {"Match Name", "Match"}, {"Team", "Equipe"}}),
+					Types = Table.TransformColumnTypes(Renomme, {{"Tournoi", type text}, {"Stage", type text}, {"MatchType", type text}, {"Match", type text}, {"Equipe", type text}, {"Action", type text}, {"Map", type text}}, "en-US"),
+					MatchID = Table.AddColumn(Types, "MatchID", each Text.From([Annee]) & "|" & [Tournoi] & "|" & [Stage] & "|" & [MatchType] & "|" & [Match], type text),
+					Final = Table.SelectColumns(MatchID, {"MatchID", "Annee", "Tournoi", "Stage", "MatchType", "Match", "Equipe", "Action", "Map"})
+				in
+					Final
+

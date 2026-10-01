@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "VCT"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "08d6da25-195e-46a5-ba06-e81c637504e9"
+  }
+}

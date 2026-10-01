@@ -1,0 +1,70 @@
+table Picks
+	lineageTag: c0f848d0-913d-47a4-a1e0-be9e45702a79
+
+	column Cle
+		dataType: string
+		isHidden
+		lineageTag: d1420425-315e-47ff-b7e8-24a055c4355a
+		summarizeBy: none
+		sourceColumn: Cle
+
+	column Equipe
+		dataType: string
+		lineageTag: da42ca69-3da7-4f36-bc6c-cf6f7634e93c
+		summarizeBy: none
+		sourceColumn: Equipe
+
+	column Agent
+		dataType: string
+		isHidden
+		lineageTag: a1d6a429-6044-4a5b-afe1-44fdbb919d28
+		summarizeBy: none
+		sourceColumn: Agent
+
+	column Victoires
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d5facc5c-e486-4030-8919-eccd2ec53478
+		summarizeBy: none
+		sourceColumn: Victoires
+
+	column Defaites
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d4ef16c3-7237-44a1-8bb2-f2779011e7df
+		summarizeBy: none
+		sourceColumn: Defaites
+
+	column Apparitions
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 496127bf-8c49-4eff-8009-2943abb94e79
+		summarizeBy: none
+		sourceColumn: Apparitions
+
+	partition Picks = m
+		mode: import
+		source =
+				let
+					Charger = (a as number) =>
+						let
+							Source = Csv.Document(File.Contents(Dossier_Data & "teams_picked_agents_" & Number.ToText(a) & ".csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+							Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+							AvecAnnee = Table.AddColumn(Entetes, "Annee", each a, Int64.Type)
+						in
+							AvecAnnee,
+					Tout = Table.Combine(List.Transform({2021 .. 2026}, Charger)),
+					SansAgregats = Table.SelectRows(Tout, each [Map] <> "All Maps" and [Stage] <> "All Stages" and [#"Match Type"] <> "All Match Types"),
+					Renomme = Table.RenameColumns(SansAgregats, {{"Tournament", "Tournoi"}, {"Match Type", "MatchType"}, {"Team", "Equipe"}, {"Total Wins By Map", "Victoires"}, {"Total Loss By Map", "Defaites"}, {"Total Maps Played", "Apparitions"}}),
+					Agents = Table.TransformColumns(Renomme, {{"Agent", each if _ = "kayo" then "KAY/O" else Text.Proper(_), type text}}),
+					Types = Table.TransformColumnTypes(Agents, {{"Tournoi", type text}, {"Stage", type text}, {"MatchType", type text}, {"Map", type text}, {"Equipe", type text}, {"Victoires", Int64.Type}, {"Defaites", Int64.Type}, {"Apparitions", Int64.Type}}, "en-US"),
+					Cle = Table.AddColumn(Types, "Cle", each Text.From([Annee]) & "|" & [Tournoi] & "|" & [Stage] & "|" & [MatchType] & "|" & [Map], type text),
+					Final = Table.SelectColumns(Cle, {"Cle", "Equipe", "Agent", "Victoires", "Defaites", "Apparitions"})
+				in
+					Final
+
+	annotation PBI_ResultType = Table
+

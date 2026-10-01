@@ -1,0 +1,92 @@
+table _Mesures
+	lineageTag: 8babb500-942e-4643-a7f2-15998c3b3e59
+
+	/// Nombre de maps jouées (dénominateur du pick rate)
+	measure 'Maps jouées' = SUM(Contextes[MapsJouees])
+		formatString: #,0
+		lineageTag: 24080934-3665-4a29-ba3f-f54d1583981d
+
+	/// Nombre de fois où une équipe a joué l'agent (équipe x map)
+	measure 'Nb apparitions' = SUM(Picks[Apparitions])
+		formatString: #,0
+		lineageTag: 94cff6fd-e317-4bfa-b951-e8336166953f
+
+	/// Part des équipes-maps où l'agent est joué. Filtré par rôle, donne le nombre moyen d'agents du rôle par équipe (voir Agents par équipe).
+	measure 'Pick Rate' = DIVIDE([Nb apparitions], 2 * [Maps jouées])
+		formatString: 0.0%
+		lineageTag: f6514cca-9eb0-46de-9f48-36ae24fb75d5
+
+	/// Nombre moyen d'agents par équipe. À utiliser avec un filtre Rôle : 1,3 = 1,3 agents de ce rôle par composition. Sans filtre = environ 5.
+	measure 'Agents par équipe' = [Pick Rate]
+		formatString: 0.00
+		lineageTag: 757bb89c-68a5-4b37-8e4c-a4164a752a07
+
+	measure Victoires = SUM(Picks[Victoires])
+		formatString: #,0
+		lineageTag: 5cda17ac-d8d3-42ae-bb81-0a19c343931b
+
+	measure Défaites = SUM(Picks[Defaites])
+		formatString: #,0
+		lineageTag: 92486b8c-2485-4248-9352-16b6824a4054
+
+	/// Taux de victoire des équipes qui jouent l'agent
+	measure 'Win Rate' = DIVIDE([Victoires], [Victoires] + [Défaites])
+		formatString: 0.0%
+		lineageTag: 3110ffb5-df5b-4192-84cd-7dfa5a2011c8
+
+	/// Taux de victoire des rounds côté attaque, pondéré par le nombre de maps
+	measure 'Win Rate Attaque' = DIVIDE(SUMX(Contextes, Contextes[WinAttaque] * Contextes[MapsJouees]), [Maps jouées])
+		formatString: 0.0%
+		lineageTag: 1a787bd1-fff7-4919-ba90-fde5a9f09984
+
+	/// Taux de victoire des rounds côté défense, pondéré par le nombre de maps
+	measure 'Win Rate Défense' = DIVIDE(SUMX(Contextes, Contextes[WinDefense] * Contextes[MapsJouees]), [Maps jouées])
+		formatString: 0.0%
+		lineageTag: b7b303df-8bc5-44d9-a7cf-d4babcccb4ba
+
+	/// Rang de l'agent par pick rate, parmi les agents visibles
+	measure 'Rang Pick Rate' = IF(ISBLANK([Pick Rate]), BLANK(), RANKX(ALLSELECTED(Agents[Agent]), [Pick Rate], , DESC, DENSE))
+		formatString: 0
+		lineageTag: 32367fa8-e051-4226-ab0f-8fd80cdaecc1
+
+	/// Pick rate de l'année précédente (une seule année sélectionnée ou en axe)
+	measure 'Pick Rate N-1' =
+			VAR a = SELECTEDVALUE(Annees[Annee])
+			RETURN
+				IF(NOT ISBLANK(a), CALCULATE([Pick Rate], Annees[Annee] = a - 1))
+		formatString: 0.0%
+		lineageTag: 5489877c-bc1c-4bd0-8e7e-cc77c0a96d6a
+
+	/// Évolution du pick rate en points de pourcentage par rapport à l'année précédente
+	measure 'Variation Pick Rate (pts)' = IF(ISBLANK([Pick Rate N-1]), BLANK(), ([Pick Rate] - [Pick Rate N-1]) * 100)
+		formatString: +0.0;-0.0;0.0
+		lineageTag: 9552b236-2b90-4052-9f8c-541f7c22f6b7
+
+	measure 'Bans de map' = CALCULATE(COUNTROWS(Draft), Draft[Action] = "ban")
+		formatString: #,0
+		lineageTag: 66e57779-fa18-47f2-b573-e8a1acced0c1
+
+	measure 'Sélections de map' = CALCULATE(COUNTROWS(Draft), Draft[Action] = "pick")
+		formatString: #,0
+		lineageTag: 23ada008-61c8-48c5-bdfd-d48e5871abc2
+
+	/// Parmi les actions de draft sur la map, part des bans (le reste = picks)
+	measure 'Part de bans' = DIVIDE([Bans de map], [Bans de map] + [Sélections de map])
+		formatString: 0.0%
+		lineageTag: 029c7abb-af85-482d-941e-8318a4fe2fce
+
+	column Colonne
+		dataType: string
+		isHidden
+		lineageTag: 73289aa0-c07d-493d-94ad-2e82fdc16d33
+		summarizeBy: none
+		sourceColumn: Colonne
+
+	partition _Mesures = m
+		mode: import
+		source =
+				let
+					Source = #table(type table [Colonne = text], {})
+				in
+					Source
+

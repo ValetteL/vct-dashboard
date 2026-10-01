@@ -1,0 +1,34 @@
+table Agents
+	lineageTag: 67345a71-582e-4a47-9ac3-a8840e9ebed1
+
+	column Agent
+		dataType: string
+		lineageTag: 9a9724f4-b52a-4bca-b885-8f7022174ed9
+		summarizeBy: none
+		sourceColumn: Agent
+
+	column Role
+		dataType: string
+		lineageTag: 9c7e12c5-0dc4-4492-8e2d-b763df633003
+		summarizeBy: none
+		sourceColumn: Role
+
+	column PremiereAnnee
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a7def94-4b96-4e53-b884-815b8025a818
+		summarizeBy: none
+		sourceColumn: PremiereAnnee
+
+	partition Agents = m
+		mode: import
+		source =
+				let
+					Roles = #table(type table [Agent = text, Role = text], {{"Jett", "Duelliste"}, {"Phoenix", "Duelliste"}, {"Raze", "Duelliste"}, {"Reyna", "Duelliste"}, {"Yoru", "Duelliste"}, {"Neon", "Duelliste"}, {"Iso", "Duelliste"}, {"Waylay", "Duelliste"}, {"Sova", "Initiateur"}, {"Breach", "Initiateur"}, {"Skye", "Initiateur"}, {"KAY/O", "Initiateur"}, {"Fade", "Initiateur"}, {"Gekko", "Initiateur"}, {"Tejo", "Initiateur"}, {"Brimstone", "Contrôleur"}, {"Viper", "Contrôleur"}, {"Omen", "Contrôleur"}, {"Astra", "Contrôleur"}, {"Harbor", "Contrôleur"}, {"Clove", "Contrôleur"}, {"Miks", "Contrôleur"}, {"Sage", "Sentinelle"}, {"Cypher", "Sentinelle"}, {"Killjoy", "Sentinelle"}, {"Chamber", "Sentinelle"}, {"Deadlock", "Sentinelle"}, {"Vyse", "Sentinelle"}, {"Veto", "Sentinelle"}}),
+					PicksAnnee = Table.AddColumn(Picks, "Annee", each Number.FromText(Text.BeforeDelimiter([Cle], "|")), Int64.Type),
+					Groupe = Table.Group(PicksAnnee, {"Agent"}, {{"PremiereAnnee", each List.Min([Annee]), Int64.Type}}),
+					Fusion = Table.NestedJoin(Roles, {"Agent"}, Groupe, {"Agent"}, "G", JoinKind.LeftOuter),
+					Final = Table.ExpandTableColumn(Fusion, "G", {"PremiereAnnee"})
+				in
+					Final
+

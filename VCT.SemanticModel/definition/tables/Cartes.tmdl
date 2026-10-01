@@ -1,0 +1,32 @@
+table Cartes
+	lineageTag: 69d063cd-c4cb-44be-9960-b4b52e2c9a28
+
+	column Map
+		dataType: string
+		lineageTag: 556f3604-c8db-40e3-af73-6186e183ee2f
+		summarizeBy: none
+		sourceColumn: Map
+
+	column PremiereAnnee
+		dataType: int64
+		formatString: 0
+		lineageTag: a483e5e8-7f80-400a-955e-84f4d832f156
+		summarizeBy: none
+		sourceColumn: PremiereAnnee
+
+	column DerniereAnnee
+		dataType: int64
+		formatString: 0
+		lineageTag: 20391545-afb3-427d-a110-ed285b9786eb
+		summarizeBy: none
+		sourceColumn: DerniereAnnee
+
+	partition Cartes = m
+		mode: import
+		source =
+				let
+					Groupe = Table.Group(Contextes, {"Map"}, {{"PremiereAnnee", each List.Min([Annee]), Int64.Type}, {"DerniereAnnee", each List.Max([Annee]), Int64.Type}}),
+					Tri = Table.Sort(Groupe, {{"Map", Order.Ascending}})
+				in
+					Tri
+

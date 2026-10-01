@@ -1,0 +1,24 @@
+relationship rel_01_picks_contextes
+	fromColumn: Picks.Cle
+	toColumn: Contextes.Cle
+
+relationship rel_02_picks_agents
+	fromColumn: Picks.Agent
+	toColumn: Agents.Agent
+
+relationship rel_03_contextes_annees
+	fromColumn: Contextes.Annee
+	toColumn: Annees.Annee
+
+relationship rel_04_contextes_cartes
+	fromColumn: Contextes.Map
+	toColumn: Cartes.Map
+
+relationship rel_05_draft_annees
+	fromColumn: Draft.Annee
+	toColumn: Annees.Annee
+
+relationship rel_06_draft_cartes
+	fromColumn: Draft.Map
+	toColumn: Cartes.Map
+
