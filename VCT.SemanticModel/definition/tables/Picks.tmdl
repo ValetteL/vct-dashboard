@@ -10,6 +10,7 @@ table Picks
 
 	column Equipe
 		dataType: string
+		isHidden
 		lineageTag: da42ca69-3da7-4f36-bc6c-cf6f7634e93c
 		summarizeBy: none
 		sourceColumn: Equipe

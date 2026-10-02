@@ -1,0 +1,17 @@
+table Cotes
+	lineageTag: 1d3604b0-d83c-4cad-a69f-b0f2a4f0c51b
+
+	column Cote
+		dataType: string
+		lineageTag: c3986210-a2ed-417e-b8bf-db687d7e0258
+		summarizeBy: none
+		sourceColumn: Cote
+
+	partition Cotes = m
+		mode: import
+		source =
+				let
+					Source = #table(type table [Cote = text], {{"Attaque"}, {"Défense"}})
+				in
+					Source
+

@@ -20,6 +20,20 @@ table Agents
 		summarizeBy: none
 		sourceColumn: PremiereAnnee
 
+	column Icone
+		dataType: string
+		lineageTag: 31d83c42-d747-4f90-97ad-83a476deafbe
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: Icone
+
+	column Portrait
+		dataType: string
+		lineageTag: 9d247a6a-3ee7-4301-bc30-dddf7760a0b7
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: Portrait
+
 	partition Agents = m
 		mode: import
 		source =
@@ -28,7 +42,9 @@ table Agents
 					PicksAnnee = Table.AddColumn(Picks, "Annee", each Number.FromText(Text.BeforeDelimiter([Cle], "|")), Int64.Type),
 					Groupe = Table.Group(PicksAnnee, {"Agent"}, {{"PremiereAnnee", each List.Min([Annee]), Int64.Type}}),
 					Fusion = Table.NestedJoin(Roles, {"Agent"}, Groupe, {"Agent"}, "G", JoinKind.LeftOuter),
-					Final = Table.ExpandTableColumn(Fusion, "G", {"PremiereAnnee"})
+					Etendu = Table.ExpandTableColumn(Fusion, "G", {"PremiereAnnee"}),
+					Fusion2 = Table.NestedJoin(Etendu, {"Agent"}, AgentsVisuels, {"Agent"}, "V", JoinKind.LeftOuter),
+					Final = Table.ExpandTableColumn(Fusion2, "V", {"Icone", "Portrait"})
 				in
 					Final
 

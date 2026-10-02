@@ -4,5 +4,37 @@
   "displayName": "Maps",
   "displayOption": "FitToPage",
   "height": 720,
-  "width": 1280
+  "width": 1280,
+  "objects": {
+    "outspacePane": [
+      {
+        "properties": {
+          "width": {
+            "expr": {
+              "Literal": {
+                "Value": "184L"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "8ee9e65b34389ee010b5",
+      "target": "031c9e9a2308c8c2081e",
+      "type": "NoFilter"
+    },
+    {
+      "source": "8ee9e65b34389ee010b5",
+      "target": "d1f1a96c01d58370d706",
+      "type": "DataFilter"
+    },
+    {
+      "source": "8ee9e65b34389ee010b5",
+      "target": "af003d24184aba0dc176",
+      "type": "NoFilter"
+    }
+  ]
 }

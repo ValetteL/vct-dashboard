@@ -22,3 +22,19 @@ relationship rel_06_draft_cartes
 	fromColumn: Draft.Map
 	toColumn: Cartes.Map
 
+relationship rel_07_perfcote_agents
+	fromColumn: PerfCote.Agent
+	toColumn: Agents.Agent
+
+relationship rel_08_perfcote_cartes
+	fromColumn: PerfCote.Map
+	toColumn: Cartes.Map
+
+relationship rel_09_perfcote_annees
+	fromColumn: PerfCote.Annee
+	toColumn: Annees.Annee
+
+relationship rel_10_perfcote_cotes
+	fromColumn: PerfCote.Cote
+	toColumn: Cotes.Cote
+

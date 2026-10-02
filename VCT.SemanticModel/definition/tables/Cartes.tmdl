@@ -21,12 +21,35 @@ table Cartes
 		summarizeBy: none
 		sourceColumn: DerniereAnnee
 
+	column Splash
+		dataType: string
+		lineageTag: b5ed0f51-af34-4fd6-888b-25b6912cd527
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: Splash
+
+	column Minimap
+		dataType: string
+		lineageTag: b4f36782-96b2-431d-b122-fe9d12ddb24c
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: Minimap
+
+	column Banniere
+		dataType: string
+		lineageTag: 895c2918-15f4-45b7-9ac9-00ac67071e9f
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: Banniere
+
 	partition Cartes = m
 		mode: import
 		source =
 				let
 					Groupe = Table.Group(Contextes, {"Map"}, {{"PremiereAnnee", each List.Min([Annee]), Int64.Type}, {"DerniereAnnee", each List.Max([Annee]), Int64.Type}}),
-					Tri = Table.Sort(Groupe, {{"Map", Order.Ascending}})
+					Tri = Table.Sort(Groupe, {{"Map", Order.Ascending}}),
+					Fusion = Table.NestedJoin(Tri, {"Map"}, CartesVisuels, {"Map"}, "V", JoinKind.LeftOuter),
+					Final = Table.ExpandTableColumn(Fusion, "V", {"Splash", "Minimap", "Banniere"})
 				in
-					Tri
+					Final
 

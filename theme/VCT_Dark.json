@@ -1,0 +1,85 @@
+{
+  "name": "VCT Valorant",
+  "dataColors": [
+    "#7B61FF",
+    "#FF6B35",
+    "#F4B400",
+    "#14A3B8",
+    "#C9D1D6",
+    "#FF4655",
+    "#3A86FF",
+    "#6FE3C1"
+  ],
+  "background": "#16222E",
+  "foreground": "#ECE8E1",
+  "tableAccent": "#FF4655",
+  "good": "#6FE3C1",
+  "neutral": "#768079",
+  "bad": "#FF4655",
+  "minimum": "#1B2733",
+  "center": "#7A3B47",
+  "maximum": "#FF4655",
+  "firstLevelElements": "#ECE8E1",
+  "secondLevelElements": "#9AA7AF",
+  "thirdLevelElements": "#2B3A47",
+  "fourthLevelElements": "#FF4655",
+  "backgroundLight": "#1B2733",
+  "backgroundNeutral": "#2B3A47",
+  "textClasses": {
+    "callout": { "fontSize": 32, "fontFace": "DIN", "color": "#ECE8E1" },
+    "title": { "fontSize": 12, "fontFace": "DIN", "color": "#ECE8E1" },
+    "header": { "fontSize": 11, "fontFace": "DIN", "color": "#ECE8E1" },
+    "label": { "fontSize": 10, "fontFace": "Segoe UI", "color": "#9AA7AF" }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [
+          {
+            "show": true,
+            "alignment": "left",
+            "fontColor": { "solid": { "color": "#ECE8E1" } }
+          }
+        ],
+        "background": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#16222E" } },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#2B3A47" } },
+            "radius": 0
+          }
+        ],
+        "dropShadow": [{ "show": false }]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": { "solid": { "color": "#0F1923" } },
+            "transparency": 0
+          }
+        ]
+      }
+    },
+    "slicer": {
+      "*": {
+        "header": [
+          { "fontColor": { "solid": { "color": "#ECE8E1" } } }
+        ],
+        "items": [
+          {
+            "fontColor": { "solid": { "color": "#ECE8E1" } },
+            "background": { "solid": { "color": "#16222E" } }
+          }
+        ]
+      }
+    }
+  }
+}

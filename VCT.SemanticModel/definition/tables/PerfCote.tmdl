@@ -1,0 +1,90 @@
+table PerfCote
+	lineageTag: 87ed42e9-6c2c-4d09-a03f-7dfc7a18962d
+
+	column Annee
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2b62f5b4-0539-48cd-8714-9769bfdcc561
+		summarizeBy: none
+		sourceColumn: Annee
+
+	column Map
+		dataType: string
+		isHidden
+		lineageTag: 217d71c6-0b0e-435a-b9cf-c9be115ede9a
+		summarizeBy: none
+		sourceColumn: Map
+
+	column Agent
+		dataType: string
+		isHidden
+		lineageTag: aa8880fe-1151-4fa0-b072-a3748bd73a8b
+		summarizeBy: none
+		sourceColumn: Agent
+
+	column Cote
+		dataType: string
+		isHidden
+		lineageTag: c46c9224-2b9d-4fbf-a6d7-3f4c5d8b6b73
+		summarizeBy: none
+		sourceColumn: Cote
+
+	column Joueurs
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 02ef5618-8c7e-4020-8403-96013a810661
+		summarizeBy: none
+		sourceColumn: Joueurs
+
+	column ACS_Somme
+		dataType: double
+		isHidden
+		formatString: 0.0
+		lineageTag: 4b56bd70-3f63-4627-b3ef-b3a579e8dfd6
+		summarizeBy: none
+		sourceColumn: ACS_Somme
+
+	column Kills
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6d5c5f37-3a60-403c-80cc-1fc2dccabfe7
+		summarizeBy: none
+		sourceColumn: Kills
+
+	column Deaths
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8dfbd38c-355d-444c-a8c7-27907b1568c4
+		summarizeBy: none
+		sourceColumn: Deaths
+
+	column FirstKills
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: eaa887aa-a969-44ad-beb3-4482582ba33f
+		summarizeBy: none
+		sourceColumn: FirstKills
+
+	column FirstDeaths
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9d5fffa9-84cc-4cac-af7b-1f4a01eb3e5c
+		summarizeBy: none
+		sourceColumn: FirstDeaths
+
+	partition PerfCote = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(Dossier_Data & "perf_cote.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"Annee", Int64.Type}, {"Map", type text}, {"Agent", type text}, {"Cote", type text}, {"Joueurs", Int64.Type}, {"ACS_Somme", type number}, {"Kills", Int64.Type}, {"Deaths", Int64.Type}, {"FirstKills", Int64.Type}, {"FirstDeaths", Int64.Type}}, "en-US")
+				in
+					Types
+

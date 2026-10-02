@@ -42,6 +42,7 @@ table Draft
 
 	column Equipe
 		dataType: string
+		isHidden
 		lineageTag: 32afb160-c6f5-4b8e-aa72-08be3f3bc9fd
 		summarizeBy: none
 		sourceColumn: Equipe

@@ -1,14 +1,14 @@
 {
-  "name": "VCT",
+  "name": "VCT Valorant",
   "dataColors": [
     "#7B61FF",
     "#FF6B35",
     "#F4B400",
     "#14A3B8",
-    "#2D3A4B",
-    "#9AA5B1",
-    "#2E9E5B",
-    "#E63946",
+    "#C9D1D6",
+    "#FF4655",
+    "#3A86FF",
+    "#6FE3C1",
     "#3599B8",
     "#DFBFBF",
     "#4AC5BB",
@@ -482,41 +482,41 @@
     "#0D2E25",
     "#54484E"
   ],
-  "background": "#FFFFFF",
-  "foreground": "#1B2430",
-  "tableAccent": "#2D3A4B",
-  "good": "#2E9E5B",
-  "neutral": "#9AA5B1",
-  "bad": "#E63946",
-  "minimum": "#EAF0F7",
-  "center": "#8FA6C4",
-  "maximum": "#1F3A5F",
-  "firstLevelElements": "#1B2430",
-  "secondLevelElements": "#4A5868",
-  "thirdLevelElements": "#E4E8EE",
-  "fourthLevelElements": "#2D3A4B",
-  "backgroundLight": "#F4F5F7",
-  "backgroundNeutral": "#E4E8EE",
+  "background": "#16222E",
+  "foreground": "#ECE8E1",
+  "tableAccent": "#FF4655",
+  "good": "#6FE3C1",
+  "neutral": "#768079",
+  "bad": "#FF4655",
+  "minimum": "#1B2733",
+  "center": "#7A3B47",
+  "maximum": "#FF4655",
+  "firstLevelElements": "#ECE8E1",
+  "secondLevelElements": "#9AA7AF",
+  "thirdLevelElements": "#2B3A47",
+  "fourthLevelElements": "#FF4655",
+  "backgroundLight": "#1B2733",
+  "backgroundNeutral": "#2B3A47",
   "textClasses": {
     "callout": {
-      "fontSize": 30,
-      "fontFace": "Segoe UI Semibold",
-      "color": "#1B2430"
+      "fontSize": 32,
+      "fontFace": "DIN",
+      "color": "#ECE8E1"
     },
     "title": {
-      "fontSize": 13,
-      "fontFace": "Segoe UI Semibold",
-      "color": "#1B2430"
+      "fontSize": 12,
+      "fontFace": "DIN",
+      "color": "#ECE8E1"
     },
     "header": {
       "fontSize": 11,
-      "fontFace": "Segoe UI Semibold",
-      "color": "#1B2430"
+      "fontFace": "DIN",
+      "color": "#ECE8E1"
     },
     "label": {
       "fontSize": 10,
       "fontFace": "Segoe UI",
-      "color": "#4A5868"
+      "color": "#9AA7AF"
     }
   },
   "visualStyles": {
@@ -528,7 +528,7 @@
             "alignment": "left",
             "fontColor": {
               "solid": {
-                "color": "#1B2430"
+                "color": "#ECE8E1"
               }
             }
           }
@@ -538,10 +538,26 @@
             "show": true,
             "color": {
               "solid": {
-                "color": "#FFFFFF"
+                "color": "#16222E"
               }
             },
             "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#2B3A47"
+              }
+            },
+            "radius": 0
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
           }
         ]
       }
@@ -552,10 +568,37 @@
           {
             "color": {
               "solid": {
-                "color": "#F4F5F7"
+                "color": "#0F1923"
               }
             },
             "transparency": 0
+          }
+        ]
+      }
+    },
+    "slicer": {
+      "*": {
+        "header": [
+          {
+            "fontColor": {
+              "solid": {
+                "color": "#ECE8E1"
+              }
+            }
+          }
+        ],
+        "items": [
+          {
+            "fontColor": {
+              "solid": {
+                "color": "#ECE8E1"
+              }
+            },
+            "background": {
+              "solid": {
+                "color": "#16222E"
+              }
+            }
           }
         ]
       }

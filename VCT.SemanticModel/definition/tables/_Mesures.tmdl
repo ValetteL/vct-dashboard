@@ -79,6 +79,31 @@ table _Mesures
 	measure 'Couleur Rôle' = SWITCH(SELECTEDVALUE(Agents[Role]), "Duelliste", "#FF6B35", "Initiateur", "#F4B400", "Contrôleur", "#7B61FF", "Sentinelle", "#14A3B8", "#2D3A4B")
 		lineageTag: e91a0d53-8fe5-4840-bcd6-0453feaeea9e
 
+	/// Score de combat moyen par joueur (stats par côté)
+	measure 'ACS moyen' = DIVIDE(SUM(PerfCote[ACS_Somme]), SUM(PerfCote[Joueurs]))
+		formatString: 0
+		lineageTag: c4b9c5bd-eacb-42fe-9af8-965b22ef5a34
+
+	/// Kills divisés par morts (stats par côté)
+	measure K/D = DIVIDE(SUM(PerfCote[Kills]), SUM(PerfCote[Deaths]))
+		formatString: 0.00
+		lineageTag: c87b6484-068a-4c06-bfc2-791b8e1aa790
+
+	/// Taille d'échantillon des stats par côté : à afficher pour juger la fiabilité
+	measure 'Joueurs-maps (stats par côté)' = SUM(PerfCote[Joueurs])
+		formatString: #,0
+		lineageTag: 8cd2f1a0-0662-4174-bde0-1aae83599dcd
+
+	/// Win rate du côté sélectionné dans la table Cotes
+	measure 'Win Rate du côté' = SWITCH(SELECTEDVALUE(Cotes[Cote]), "Attaque", [Win Rate Attaque], "Défense", [Win Rate Défense])
+		formatString: 0.0%
+		lineageTag: 667dd4e3-4ba8-43c3-bf38-51d31461d01e
+
+	/// Rouge pour l'attaque, bleu pour la défense
+	measure 'Couleur Côté' = IF(SELECTEDVALUE(Cotes[Cote]) = "Attaque", "#FF4655", "#3A86FF")
+		formatString: 0
+		lineageTag: bba6d33f-53f9-4f24-9e9f-ec70d430fbc6
+
 	column Colonne
 		dataType: string
 		isHidden

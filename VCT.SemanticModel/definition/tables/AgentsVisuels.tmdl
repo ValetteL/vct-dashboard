@@ -1,0 +1,37 @@
+table AgentsVisuels
+	isHidden
+	lineageTag: 31794028-dc6d-439c-bf3a-e0c0920a3ac1
+
+	column Agent
+		dataType: string
+		isHidden
+		lineageTag: ae0b8337-66bb-4c1b-bd92-c04c8b32997f
+		summarizeBy: none
+		sourceColumn: Agent
+
+	column Icone
+		dataType: string
+		isHidden
+		lineageTag: b03a9432-d5c5-42e8-ac01-c9b4af7d11d7
+		summarizeBy: none
+		sourceColumn: Icone
+
+	column Portrait
+		dataType: string
+		isHidden
+		lineageTag: 22147a0f-14d7-4725-a821-156fa513849d
+		summarizeBy: none
+		sourceColumn: Portrait
+
+	partition AgentsVisuels = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(Dossier_Data & "agents_visuels.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"Agent", type text}, {"Icone", type text}, {"Portrait", type text}})
+				in
+					Types
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,44 @@
+table CartesVisuels
+	isHidden
+	lineageTag: ed1d3ab6-7f29-4f10-a76c-d6688e4e6e0c
+
+	column Map
+		dataType: string
+		isHidden
+		lineageTag: 8fa8f0a1-7a6e-4d98-b54d-0487613f078f
+		summarizeBy: none
+		sourceColumn: Map
+
+	column Splash
+		dataType: string
+		isHidden
+		lineageTag: 42b459ff-9167-4e0c-9cc5-d3312a7cfe90
+		summarizeBy: none
+		sourceColumn: Splash
+
+	column Minimap
+		dataType: string
+		isHidden
+		lineageTag: 9b7fb554-3df4-47ea-8396-d76ae7a8b065
+		summarizeBy: none
+		sourceColumn: Minimap
+
+	column Banniere
+		dataType: string
+		isHidden
+		lineageTag: 4c88927a-b0d4-4b87-9c19-846ee2ed0a1d
+		summarizeBy: none
+		sourceColumn: Banniere
+
+	partition CartesVisuels = m
+		mode: import
+		source =
+				let
+					Source = Csv.Document(File.Contents(Dossier_Data & "cartes_visuels.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+					Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+					Types = Table.TransformColumnTypes(Entetes, {{"Map", type text}, {"Splash", type text}, {"Minimap", type text}, {"Banniere", type text}})
+				in
+					Types
+
+	annotation PBI_ResultType = Table
+

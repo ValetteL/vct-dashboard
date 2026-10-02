@@ -1,12 +1,85 @@
 table _Mesures_Maps
 	lineageTag: 3117ee66-e79d-49c5-aa87-b21110cc3a91
 
+	measure 'Écart de pick vs toutes maps (pts)' = ```
+			
+			    ([Pick Rate] - CALCULATE([Pick Rate], REMOVEFILTERS(Cartes))) * 100
+			```
+		lineageTag: de72986c-674a-4e58-b660-890aecbd404b
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Écart absolu (pts)' = ABS([Écart de pick vs toutes maps (pts)])
+		lineageTag: 9ec75783-b7b4-4fc7-8cbf-5d52c44eac5d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Part de compo qui change selon la map' =
+			
+			VAR total = CALCULATE([Agents par équipe], REMOVEFILTERS(Agents))
+			RETURN
+			    DIVIDE(
+			        SUMX(VALUES(Agents[Agent]),
+			             ABS([Pick Rate] - CALCULATE([Pick Rate], REMOVEFILTERS(Cartes)))),
+			        2 * total
+			    )
+		lineageTag: 6b0b5c20-f39d-4e79-ab28-5b2e7566b440
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Part des maps jouées' = ```
+			
+			    DIVIDE([Maps jouées], CALCULATE([Maps jouées], REMOVEFILTERS(Cartes)))
+			```
+		lineageTag: 2eac8a04-c169-47d4-9ecc-6f7803396393
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Écart de part de bans vs moyenne (pts)' = ```
+			
+			    ([Part de bans] - CALCULATE([Part de bans], REMOVEFILTERS(Cartes))) * 100
+			```
+		lineageTag: 28c68d60-b9a6-4aef-af31-8d8432cb0b2a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Statut de la map' = ```
+			
+			    IF(
+			        ISBLANK([Maps jouées]),
+			        "Hors pool sur cette période",
+			        "En jeu : " & FORMAT([Maps jouées], "0") & " maps"
+			    )
+			```
+		lineageTag: a732dcc9-2435-44fb-a580-ec9cb93ad6e9
+
+	measure 'Avantage attaque (pts)' = ([Win Rate Attaque] - 0.5) * 100
+		lineageTag: 87722d9e-c7b7-4a4f-bb92-2be7ed67f871
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Titre agents distinctifs' = ```
+			
+			    "Ce qui distingue " & SELECTEDVALUE(Cartes[Map], "les maps") & " (écart de pick, pts)"
+			```
+		lineageTag: d4cd8ffa-878a-44ea-882c-b1bd476602e5
+
+	measure 'Agent n°1' = ```
+			
+			    MAXX(TOPN(1, VALUES(Agents[Agent]), [Pick Rate], DESC), Agents[Agent])
+			```
+		lineageTag: 48b29ce9-c98e-4eb6-8097-70bddcfc67e7
+
 	column Colonne
 		dataType: string
 		isHidden
 		lineageTag: d4ce2149-4c45-4f15-9e68-41e504b09049
 		summarizeBy: none
 		sourceColumn: Colonne
+
+		changedProperty = IsHidden
 
 	partition _Mesures_Maps = m
 		mode: import
@@ -15,4 +88,6 @@ table _Mesures_Maps
 					Source = #table(type table [Colonne = text], {})
 				in
 					Source
+
+	changedProperty = IsHidden
 
